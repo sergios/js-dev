@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>D3 Pratice - Single Line Chart</title>
+  <script src="d3/d3.v4.min.js"></script>
+</head>
+<body>
+  <svg class="chart" width="320" height="240"></svg>
+  <script>
+    var width = 320, height = 240, margin = 2;
+    var parseTime = d3.timeParse("%d-%m-%Y");
+
+    var data = [{ "date": "03-11-2016", "volume": 0.15 },
+                { "date": "04-11-2016", "volume": 0.3 },
+                { "date": "06-11-2016", "volume": 0.5 },
+                { "date": "10-11-2016", "volume": 0.2 },
+                { "date": "14-11-2016", "volume": 0.7 },
+                { "date": "18-11-2016", "volume": 0.6 },
+                { "date": "19-11-2016", "volume": 0.4 }];
+
+    data.forEach(function(d) {
+      d.date = parseTime(d.date);
+      d.volume = +d.volume;
+    });
+
+    var x = d3.scaleTime()
+              .domain(d3.extent(data, function(d) { return d.date; }))
+              .range([margin, width - margin]);
+
+    var y = d3.scaleLinear()
+              .domain([0, d3.max(data, function(d) { return d.volume; })])
+              .range([height - margin, margin]);
+
+    var line = d3.line()
+                 .curve(d3.curveBasis)
+                 .x(function(d) { return x(d.date); })
+                 .y(function(d) { return y(d.volume); })
+
+    var svg = d3.select("svg.chart")
+                .append("path")
+                .data([data])
+                .attr("d", line)
+                .attr("stroke", "#a00")
+                .attr("fill", "none")
+                .attr("stroke-width", 2);
+  </script>
+</body>
+</html>

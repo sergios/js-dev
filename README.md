@@ -1,2 +1,2 @@
 # js-dev
-My base git repository to learning js things
+Base repository to learn js things
